@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- This section controls the name/preview people see when you share the link -->
+    <meta name="description" content="Calculate future funeral costs and secure your legacy with Monarch Funeral Home.">
+    <meta property="og:title" content="Secure Your Legacy | Future Planning Calculator">
+    <meta property="og:description" content="Protect your family from rising costs with our AI-powered planning tool.">
+    <title>Future Planning Calculator | Monarch Funeral Home</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #3498db;
+            --bg: #ffffff;
+        }
+        body {
+            background-color: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #0d3b3f 0%, #072c41 100%);
+            position: relative;
+            color: white;
+        }
+        
+        .hero-gradient::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .calculator-card {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(6, 78, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #ffffff; 
+            cursor: pointer;
+            border: 4px solid #059669;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background: #d1fae5;
+        }
+        .gradient-text-hero {
+            background: linear-gradient(to right, #ffffff, #99f6e4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Message Styling */
+        #copyToast {
+            transition: all 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+        }
+        #copyToast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-24 pb-20 md:pt-36 md:pb-32 overflow-hidden border-b border-slate-900">
+        <div class="orb w-96 h-96 bg-teal-500 -top-20 -left-20"></div>
+        <div class="orb w-80 h-80 bg-blue-600 bottom-0 -right-20"></div>
+
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="text-center">
+                <span class="inline-block py-1.5 px-4 rounded-full bg-teal-900/40 backdrop-blur-md text-teal-100 text-xs font-bold uppercase tracking-widest mb-6 border border-teal-500/30">
+                    Secure Your Legacy
+                </span>
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+                    A gift of love, <br><span class="gradient-text-hero">planned today.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-teal-50/80 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Protect your family from the rising costs of tomorrow. Pre-planning is the most considerate way to ensure your wishes are honored.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#calculator" class="bg-teal-400 text-slate-900 px-10 py-4 rounded-full font-bold hover:bg-teal-300 transition-all shadow-lg hover:shadow-xl">
+                        View Cost Projection
+                    </a>
+                    <button onclick="shareLink()" class="flex items-center justify-center gap-2 bg-white/10 text-white px-10 py-4 rounded-full font-bold hover:bg-white/20 transition-all border border-white/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" /></svg>
+                        Share Planner
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="py-24 bg-slate-50">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">The Future Planning Tool</h2>
+                <p class="text-slate-500">See how inflation impacts your planning over time.</p>
+            </div>
+
+            <div class="calculator-card p-8 md:p-12 overflow-hidden relative text-white">
+                <div class="grid lg:grid-cols-2 gap-12 md:gap-16">
+                    <div class="space-y-10 relative z-10">
+                        <div>
+                            <label class="block text-xs font-bold text-emerald-100 uppercase tracking-widest mb-4">Current Service Cost</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-300 font-semibold">$</span>
+                                <input type="number" id="baseCost" value="10000" step="500" 
+                                       class="w-full pl-8 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-2xl font-bold text-white focus:ring-2 focus:ring-emerald-400 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <label class="text-xs font-bold text-emerald-100 uppercase tracking-widest">Time Horizon</label>
+                                <span id="yearsVal" class="text-emerald-300 font-bold">20 Years</span>
+                            </div>
+                            <input type="range" id="years" min="1" max="50" value="20" class="slider">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <label class="text-xs font-bold text-emerald-100 uppercase tracking-widest">Annual Inflation</label>
+                                <span id="inflationVal" class="text-emerald-300 font-bold">3.5%</span>
+                            </div>
+                            <input type="range" id="inflation" min="0" max="10" step="0.1" value="3.5" class="slider">
+                        </div>
+
+                        <button onclick="generateInsight()" id="insightBtn" class="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/30 rounded-2xl font-bold text-white transition-all flex items-center justify-center gap-3">
+                            <span>✨ Get Smart Legacy Insight</span>
+                            <div id="btnLoader" class="spinner hidden"></div>
+                        </button>
+                    </div>
+
+                    <div class="bg-black/20 backdrop-blur-md rounded-3xl p-10 flex flex-col justify-center items-center text-center text-white relative overflow-hidden border border-white/10 shadow-inner">
+                        <h4 class="text-emerald-100 uppercase tracking-widest text-xs font-bold mb-6">Future Estimated Cost</h4>
+                        <div id="futureCost" class="text-5xl md:text-6xl font-black mb-8 leading-none text-white">$19,897</div>
+                        
+                        <div class="w-full h-px bg-white/10 mb-8"></div>
+                        
+                        <div class="space-y-2">
+                            <p class="text-emerald-100 text-sm font-medium">Estimated Increase</p>
+                            <div id="savingsAmount" class="text-3xl font-bold text-emerald-400">+$9,897</div>
+                        </div>
+
+                        <div id="aiInsightContainer" class="hidden mt-8 p-6 bg-emerald-900/30 rounded-2xl border border-emerald-500/30 text-left">
+                            <p class="text-xs font-bold text-emerald-300 uppercase tracking-widest mb-2">✨ AI Strategy Note</p>
+                            <p id="aiInsightText" class="text-sm text-emerald-50 italic leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Toast (The name/message that shows when copying) -->
+    <div id="copyToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10">
+        <div class="bg-emerald-500 rounded-full p-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+        </div>
+        <span class="font-medium">Link Copied! Plan Shared Successfully.</span>
+    </div>
+
+    <!-- Final CTA -->
+    <section class="py-20 bg-slate-900 text-white text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-8">Secure your family's future today.</h2>
+            <a href="https://monarchfuneralhome.com" target="_blank" class="bg-teal-500 text-slate-900 px-8 py-4 rounded-full font-bold transition-all hover:bg-teal-400">
+                Contact Monarch Funeral Home
+            </a>
+        </div>
+    </section>
+
+    <!-- AI Chat Assistant Widget -->
+    <div id="chatWidget" class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleChat()" class="w-14 h-14 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-emerald-500 transition-all border-4 border-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+        </button>
+        
+        <div id="chatBox" class="hidden absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
+            <div class="bg-emerald-700 p-4 text-white flex justify-between items-center">
+                <div>
+                    <h5 class="font-bold text-sm">✨ Compassionate Assistant</h5>
+                    <p class="text-[10px] opacity-80 uppercase tracking-tighter">Powered by Gemini AI</p>
+                </div>
+                <button onclick="toggleChat()" class="opacity-50 hover:opacity-100">&times;</button>
+            </div>
+            <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-4 text-sm bg-slate-50">
+                <div class="bg-emerald-100 text-emerald-900 p-3 rounded-2xl rounded-tl-none mr-8">
+                    Hello. I am here to help answer your questions about future planning and funeral services with compassion. What is on your mind today?
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-white">
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" placeholder="Ask a question..." class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <button onclick="sendMessage()" id="sendBtn" class="bg-emerald-600 text-white p-2 rounded-xl hover:bg-emerald-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Utilities
+        const apiKey = "";
+        
+        async function callGemini(prompt, systemPrompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API request failed');
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (e) {
+                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+                }
+            }
+            throw new Error("Could not reach the assistant. Please try again later.");
+        }
+
+        // Share Link Utility
+        function shareLink() {
+            const url = window.location.href;
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = url;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            
+            // Show Custom Success Message
+            const toast = document.getElementById('copyToast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Calculator Logic
+        const baseCostInput = document.getElementById('baseCost');
+        const yearsSlider = document.getElementById('years');
+        const inflationSlider = document.getElementById('inflation');
+        
+        const yearsVal = document.getElementById('yearsVal');
+        const inflationVal = document.getElementById('inflationVal');
+        const futureCostEl = document.getElementById('futureCost');
+        const savingsEl = document.getElementById('savingsAmount');
+
+        function calculate() {
+            const P = parseFloat(baseCostInput.value) || 0;
+            const t = parseInt(yearsSlider.value);
+            const r = parseFloat(inflationSlider.value) / 100;
+
+            const FV = P * Math.pow((1 + r), t);
+            const increase = FV - P;
+
+            yearsVal.innerText = `${t} Year${t > 1 ? 's' : ''}`;
+            inflationVal.innerText = `${(r * 100).toFixed(1)}%`;
+            
+            futureCostEl.innerText = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0
+            }).format(FV);
+
+            savingsEl.innerText = "+" + new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                maximumFractionDigits: 0
+            }).format(increase);
+        }
+
+        [baseCostInput, yearsSlider, inflationSlider].forEach(el => {
+            el.addEventListener('input', calculate);
+        });
+
+        calculate();
+
+        // Gemini Feature 1: Insight Generator
+        async function generateInsight() {
+            const btn = document.getElementById('insightBtn');
+            const loader = document.getElementById('btnLoader');
+            const container = document.getElementById('aiInsightContainer');
+            const text = document.getElementById('aiInsightText');
+
+            btn.disabled = true;
+            loader.classList.remove('hidden');
+
+            const current = baseCostInput.value;
+            const years = yearsSlider.value;
+            const future = futureCostEl.innerText;
+            const diff = savingsEl.innerText;
+
+            const prompt = `Generate a short, compassionate, 2-sentence financial insight for someone planning a funeral. 
+            Inputs: Today cost: $${current}, Time: ${years} years, Future cost: ${future}, Inflation gap: ${diff}. 
+            Explain why pre-funding today is a smart legacy move for this specific gap.`;
+            
+            const systemPrompt = "You are a compassionate financial advisor for Monarch Funeral Home. Keep it brief, professional, and empathetic.";
+
+            try {
+                const result = await callGemini(prompt, systemPrompt);
+                text.innerText = result;
+                container.classList.remove('hidden');
+            } catch (err) {
+                text.innerText = "Unable to generate insight at the moment. Please consult our team directly.";
+                container.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                loader.classList.add('hidden');
+            }
+        }
+
+        // Gemini Feature 2: Chat Assistant
+        function toggleChat() {
+            const box = document.getElementById('chatBox');
+            box.classList.toggle('hidden');
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const btn = document.getElementById('sendBtn');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            const userDiv = document.createElement('div');
+            userDiv.className = "bg-slate-200 text-slate-900 p-3 rounded-2xl rounded-tr-none ml-8 text-right";
+            userDiv.innerText = userText;
+            messages.appendChild(userDiv);
+            input.value = "";
+            messages.scrollTop = messages.scrollHeight;
+
+            btn.disabled = true;
+
+            const systemPrompt = "You are a compassionate assistant for Monarch Funeral Home. You help users understand funeral pre-planning, grief support, and financial security. Always be gentle, respectful, and informative.";
+
+            try {
+                const aiText = await callGemini(userText, systemPrompt);
+                const aiDiv = document.createElement('div');
+                aiDiv.className = "bg-emerald-100 text-emerald-900 p-3 rounded-2xl rounded-tl-none mr-8";
+                aiDiv.innerText = aiText;
+                messages.appendChild(aiDiv);
+            } catch (err) {
+                const errDiv = document.createElement('div');
+                errDiv.className = "text-red-500 text-xs text-center p-2";
+                errDiv.innerText = "Error: " + err.message;
+                messages.appendChild(errDiv);
+            } finally {
+                btn.disabled = false;
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
