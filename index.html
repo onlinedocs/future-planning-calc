@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- This section controls the name/preview people see when you share the link -->
-    <meta name="description" content="Calculate future funeral costs and secure your legacy with Monarch Funeral Home.">
+    <!-- Professional Metadata for Sharing -->
+    <meta name="description" content="Calculate future funeral costs and secure your family's peace of mind with Monarch Funeral Home.">
     <meta property="og:title" content="Secure Your Legacy | Future Planning Calculator">
     <meta property="og:description" content="Protect your family from rising costs with our AI-powered planning tool.">
     <title>Future Planning Calculator | Monarch Funeral Home</title>
@@ -104,11 +104,11 @@
         /* Success Message Styling */
         #copyToast {
             transition: all 0.3s ease;
-            transform: translateY(100px);
+            transform: translate(-50%, 100px);
             opacity: 0;
         }
         #copyToast.show {
-            transform: translateY(0);
+            transform: translate(-50%, 0);
             opacity: 1;
         }
     </style>
@@ -131,11 +131,14 @@
                 <p class="text-lg md:text-xl text-teal-50/80 max-w-2xl mx-auto mb-12 leading-relaxed">
                     Protect your family from the rising costs of tomorrow. Pre-planning is the most considerate way to ensure your wishes are honored.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#calculator" class="bg-teal-400 text-slate-900 px-10 py-4 rounded-full font-bold hover:bg-teal-300 transition-all shadow-lg hover:shadow-xl">
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#calculator" class="w-full sm:w-auto bg-teal-400 text-slate-900 px-8 py-4 rounded-full font-bold hover:bg-teal-300 transition-all shadow-lg hover:shadow-xl text-center">
                         View Cost Projection
                     </a>
-                    <button onclick="shareLink()" class="flex items-center justify-center gap-2 bg-white/10 text-white px-10 py-4 rounded-full font-bold hover:bg-white/20 transition-all border border-white/20">
+                    <a href="#" class="w-full sm:w-auto bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-bold hover:bg-white/30 transition-all border border-white/30 text-center">
+                        Future Planning Checklist
+                    </a>
+                    <button onclick="shareLink()" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/10 text-white px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all border border-white/20">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" /></svg>
                         Share Planner
                     </button>
@@ -149,7 +152,7 @@
         <div class="max-w-5xl mx-auto px-6">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">The Future Planning Tool</h2>
-                <p class="text-slate-500">See how inflation impacts your planning over time.</p>
+                <p class="text-slate-500">Analyze how inflation affects funeral costs over time.</p>
             </div>
 
             <div class="calculator-card p-8 md:p-12 overflow-hidden relative text-white">
@@ -207,8 +210,8 @@
         </div>
     </section>
 
-    <!-- Success Toast (The name/message that shows when copying) -->
-    <div id="copyToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10">
+    <!-- Success Toast -->
+    <div id="copyToast" class="fixed bottom-10 left-1/2 z-[100] bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10">
         <div class="bg-emerald-500 rounded-full p-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
         </div>
@@ -225,7 +228,7 @@
         </div>
     </section>
 
-    <!-- AI Chat Assistant Widget -->
+    <!-- AI Chat Assistant -->
     <div id="chatWidget" class="fixed bottom-6 right-6 z-50">
         <button onclick="toggleChat()" class="w-14 h-14 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-emerald-500 transition-all border-4 border-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
@@ -293,7 +296,6 @@
             document.execCommand('copy');
             document.body.removeChild(dummy);
             
-            // Show Custom Success Message
             const toast = document.getElementById('copyToast');
             toast.classList.add('show');
             setTimeout(() => {
@@ -341,7 +343,7 @@
 
         calculate();
 
-        // Gemini Feature 1: Insight Generator
+        // AI Insight Generator
         async function generateInsight() {
             const btn = document.getElementById('insightBtn');
             const loader = document.getElementById('btnLoader');
@@ -356,18 +358,18 @@
             const future = futureCostEl.innerText;
             const diff = savingsEl.innerText;
 
-            const prompt = `Generate a short, compassionate, 2-sentence financial insight for someone planning a funeral. 
+            const prompt = `Provide a compassionate, 2-sentence financial insight for someone planning a funeral. 
             Inputs: Today cost: $${current}, Time: ${years} years, Future cost: ${future}, Inflation gap: ${diff}. 
             Explain why pre-funding today is a smart legacy move for this specific gap.`;
             
-            const systemPrompt = "You are a compassionate financial advisor for Monarch Funeral Home. Keep it brief, professional, and empathetic.";
+            const systemPrompt = "You are a compassionate financial advisor for Monarch Funeral Home. Keep it brief and empathetic.";
 
             try {
                 const result = await callGemini(prompt, systemPrompt);
                 text.innerText = result;
                 container.classList.remove('hidden');
             } catch (err) {
-                text.innerText = "Unable to generate insight at the moment. Please consult our team directly.";
+                text.innerText = "Unable to generate insight. Please consult our team directly.";
                 container.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
@@ -375,7 +377,7 @@
             }
         }
 
-        // Gemini Feature 2: Chat Assistant
+        // AI Chat Assistant
         function toggleChat() {
             const box = document.getElementById('chatBox');
             box.classList.toggle('hidden');
@@ -398,7 +400,7 @@
 
             btn.disabled = true;
 
-            const systemPrompt = "You are a compassionate assistant for Monarch Funeral Home. You help users understand funeral pre-planning, grief support, and financial security. Always be gentle, respectful, and informative.";
+            const systemPrompt = "You are a compassionate assistant for Monarch Funeral Home. Help users understand pre-planning with kindness.";
 
             try {
                 const aiText = await callGemini(userText, systemPrompt);
